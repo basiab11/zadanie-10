@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js'
 const SUPABASE_URL = 'https://fykogylrlwlqbgewbraf.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5a29neWxybHdscWJnZXdicmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NjUxMTYsImV4cCI6MjA2MzI0MTExNn0.xhBgxDooKS1vfxV_0c85r3cxeZmMp4_ZmMqPmfwz8Mg';
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -37,7 +38,7 @@ document.getElementById('article-form').addEventListener('submit', async (e) => 
   const author = document.getElementById('author').value;
   const content = document.getElementById('content').value;
 
-  const { error } = await supabase.from('articles').insert([
+  const { error } = await supabase.from('article').insert([
     { title, subtitle, author, content }
   ]);
 
