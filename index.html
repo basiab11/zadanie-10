@@ -2,16 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/zadanie-10/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <h1 class="text-2xl font-bold">Tytuł strony</h1>
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      count is 0
-    </button>
-    <script type="module" src="/src/main.js"></script>
-  </body>
-</html>
+    <script type="module" crossorigin src="/zadanie-10/assets/index-BCoNkOfg.js"></script>
+    <link rel="stylesheet" crossorigin href="/zadanie-10/assets/index-ErF6DTqK.css">
+<body>
+  <h1>Lista artykułów</h1>
+  <div id="articles-container"></div>
+
+  <h2>Dodaj nowy artykuł</h2>
+  <form id="article-form">
+    <input type="text" id="title" placeholder="Tytuł" required><br>
+    <input type="text" id="subtitle" placeholder="Podtytuł" required><br>
+    <input type="text" id="author" placeholder="Autor" required><br>
+    <textarea id="content" placeholder="Treść" required></textarea><br>
+    <button type="submit">Dodaj artykuł</button>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="main.js"></script> 
+</body>
+
