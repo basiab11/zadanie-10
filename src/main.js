@@ -4,7 +4,7 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function fetchArticles() {
   const { data, error } = await supabase
-    .from('articles')
+    .from('article')
     .select('*')
     .order('created_at', { ascending: false });
 
