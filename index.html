@@ -1,13 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
-    <link rel="stylesheet" crossorigin href="/zadanie-10/assets/index-ErF6DTqK.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
 <body>
   <h1>Lista artykułów</h1>
+
+  <label for="sort">Sortuj:</label>
+    <select id="sort">
+      <option value="created_at.asc">Po dacie rosnąco</option>
+      <option value="created_at.desc">Po dacie malejąco</option>
+      <option value="title.asc">Po nazwie alfabetycznie</option>
+    </select>
+
   <div id="articles-container"></div>
 
   <h2>Dodaj nowy artykuł</h2>
@@ -19,5 +28,5 @@
     <button type="submit">Dodaj artykuł</button>
   </form>
 <script src="https://fykogylrlwlqbgewbraf.supabase.co"></script>
-<script type="module" crossorigin src="/zadanie-10/assets/index-BCoNkOfg.js"></script>
+<script type="module" src="./main.js"></script>
 </body>
