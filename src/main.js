@@ -1,4 +1,3 @@
-import './style.css';
 import { format } from 'date-fns';
 
 const API_URL = 'https://fykogylrlwlqbgewbraf.supabase.co/rest/v1/article';
