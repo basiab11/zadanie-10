@@ -1,54 +1,86 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-const SUPABASE_URL = 'https://fykogylrlwlqbgewbraf.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5a29neWxybHdscWJnZXdicmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NjUxMTYsImV4cCI6MjA2MzI0MTExNn0.xhBgxDooKS1vfxV_0c85r3cxeZmMp4_ZmMqPmfwz8Mg';
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+import './style.css';
+import { format } from 'date-fns';
 
-async function fetchArticles() {
-  const { data, error } = await supabase
-    .from('article')
-    .select('*')
-    .order('created_at', { ascending: false });
+const API_URL = 'https://fykogylrlwlqbgewbraf.supabase.co/rest/v1/article';
+const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5a29neWxybHdscWJnZXdicmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NjUxMTYsImV4cCI6MjA2MzI0MTExNn0.xhBgxDooKS1vfxV_0c85r3cxeZmMp4_ZmMqPmfwz8Mg';
 
+async function loadArticles(orderBy = 'created_at.asc') {
+  try {
+    const response = await fetch(`${API_URL}?order=${orderBy}`, {
+      method: 'GET',
+      headers: {
+        apikey: API_KEY,
+        Authorization: `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) throw new Error('Błąd HTTP');
+
+    const data = await response.json();
+    displayArticles(data);
+  } catch (error) {
+    console.error('Błąd:', error);
+    document.getElementById('articles-container').innerText =
+      'Wystąpił błąd podczas ładowania artykułów: ' + error.message;
+  }
+}
+
+function displayArticles(articles) {
   const container = document.getElementById('articles-container');
   container.innerHTML = '';
 
-  if (error) {
-    container.innerHTML = 'Błąd podczas pobierania artykułów.';
-    return;
-  }
+  articles.forEach(article => {
+    const div = document.createElement('div');
+    div.className = 'article-box';
 
-  data.forEach(article => {
-    const articleEl = document.createElement('div');
-    articleEl.innerHTML = `
-      <h3>${article.title}</h3>
-      <h4>${article.subtitle}</h4>
+    div.innerHTML = `
+      <h2>${article.title}</h2>
+      <h3>${article.subtitle}</h3>
       <p><strong>Autor:</strong> ${article.author}</p>
-      <p><strong>Data:</strong> ${new Date(article.created_at).toLocaleString()}</p>
+      <p><strong>Data:</strong> ${format(new Date(article.created_at), 'dd-MM-yyyy')}</p>
       <p>${article.content}</p>
-      <hr>
     `;
-    container.appendChild(articleEl);
+
+    container.appendChild(div);
   });
 }
 
-document.getElementById('article-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const title = document.getElementById('title').value;
-  const subtitle = document.getElementById('subtitle').value;
-  const author = document.getElementById('author').value;
-  const content = document.getElementById('content').value;
+document.addEventListener('DOMContentLoaded', () => {
+  loadArticles();
 
-  const { error } = await supabase.from('article').insert([
-    { title, subtitle, author, content }
-  ]);
+  const form = document.getElementById('article-form');
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
 
-  if (error) {
-    alert('Błąd przy dodawaniu artykułu.');
-  } else {
-    alert('Artykuł dodany!');
-    e.target.reset();
-    fetchArticles();
-  }
+    const title = document.getElementById('title').value;
+    const subtitle = document.getElementById('subtitle').value;
+    const author = document.getElementById('author').value;
+    const content = document.getElementById('content').value;
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          apikey: API_KEY,
+          Authorization: `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title,
+          subtitle,
+          author,
+          content,
+          created_at: new Date().toISOString()
+        })
+      });
+
+      if (!response.ok) throw new Error('Błąd przy dodawaniu artykułu');
+
+      await loadArticles();
+      form.reset();
+    } catch (error) {
+      console.error('Błąd dodawania artykułu:', error);
+    }
+  });
 });
-
-fetchArticles();
