@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtitle = document.getElementById('subtitle').value;
     const author = document.getElementById('author').value;
     const content = document.getElementById('content').value;
+    const createdAtInput = document.getElementById('created at').value;
+    const createdAt = new Date(createdAtInput).toISOString();
 
     try {
       const response = await fetch(API_URL, {
@@ -82,4 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Błąd dodawania artykułu:', error);
     }
   });
+  const sortSelect = document.getElementById('sort');
+  sortSelect.addEventListener('change', () => {
+  const selectedOrder = sortSelect.value;
+  loadArticles(selectedOrder);
+});
 });
